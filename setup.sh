@@ -1,0 +1,55 @@
+#!/bin/bash
+
+set -e # fail if error occurs
+python -m ensurepip
+# Check for the 'uv' package installer.
+if ! command -v uv &> /dev/null
+then
+    python -m pip install uv
+fi
+echo ""
+
+
+# Create  virtual environment.
+VENV_DIR=".venv"
+if [ -d "$VENV_DIR" ]; then
+    echo "Using existing virtual environment: '.venv' "
+else
+    echo "Creating virtual environment..."
+    uv venv
+    echo "The virtual environment has been created successfully."
+fi
+echo ""
+
+
+# Install packages.
+# Activate the environment so we can install packages into it.
+source "$VENV_DIR/bin/activate"
+
+REQUIREMENTS_FILE="requirements.txt"
+
+if [ -f "$REQUIREMENTS_FILE" ]; then
+    uv pip install -r "$REQUIREMENTS_FILE"
+else
+    echo "Failed to install files as the requirements.txt is missing"
+    deactivate
+    exit 1
+fi
+echo ""
+
+# Step 5: Download browser binaries for Playwright.
+playwright install --with-deps
+echo "The necessary browsers for scraping are now installed (chromium)."
+echo ""
+
+
+echo "Please activate the virtual environment in your terminal by running:"
+echo "   source .venv/bin/activate"
+echo ""
+echo "2. Then, run the main scraper script with:"
+echo "   python main.py"
+echo ""
+echo "3. After the scraper has finished, you can look at the data using the DuckDB tool:"
+echo "   duckdb data/newegg_product.duckdb"
+echo "   SELECT * FROM products; ( or any other SQL command, make sure you use ; at the end )"
+echo "   SELECT * FROM reviews ( or any other SQL command to fetch specific reviews)"

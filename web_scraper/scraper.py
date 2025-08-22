@@ -187,7 +187,11 @@ class ResilientNeweggScraper:
 
                 if await next_page_locator.is_visible():
                     print(f"Navigating to page {next_page_num}...")
+                    # had to add this random click to get rid of overlays
+                    await self.page.locator('body').click(position={'x': 5, 'y': 5})
+
                     await next_page_locator.click()
+
                     current_page = next_page_num
                 else:
                     print("Last page of reviews reached.")

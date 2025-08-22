@@ -1,3 +1,5 @@
 playwright
 duckdb
 playwright-stealth
+pytest
+pytest-asyncio

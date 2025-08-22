@@ -95,9 +95,16 @@ class WebScraper:
                 next_page_locator = self.page.locator(f'ol.paginations a.button:text-is("{next_page_num}")')
 
                 if await next_page_locator.is_visible():
+                    print(f"Navigating to page {next_page_num}...")
+                    # had to add this random click to get rid of overlays
+                    await self.page.locator('body').click(position={'x': 5, 'y': 5})
+                    await next_page_locator.click()
+
+                    current_page = next_page_num
                     log.info(f"Navigating to page {next_page_num}...")
                     await next_page_locator.click()
                     current_page += 1
+                    
                 else:
                     log.info("Last page of reviews reached.")
                     break

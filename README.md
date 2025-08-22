@@ -1,4 +1,4 @@
-# Newegg Product and Review Scraper
+# Product and Review Scraper
 
 This project is a Python-based web scraper designed to extract detailed product information and customer reviews from a Newegg product page. It uses `playwright` for robust, stealth-based web scraping to handle anti-bot measures and stores the collected data in a `DuckDB` database for easy access and analysis.
 
@@ -12,7 +12,24 @@ This project is a Python-based web scraper designed to extract detailed product 
 ## Prerequisites
 
 - Python 3.10 or higher
-- `bash` for running the setup script (standard on macOS and Linux)
+- `bash` for running the setup script (default on MacOS or Linux)
+
+## WARNING 
+This project is only visible using a US IP or VPN that provides a US IP address. I could have added a network proxy to bypass this, but that was out of scope, and a bit hard.
+
+## Setup and Installation
+
+The project includes a setup script that automates the installation process.
+
+1.  **Clone the Repository**
+    ```bash
+    git clone b-jayesh9/SPTAssignment
+    cd SPTAssignment
+    ```
+
+2.  **Run the Setup Script**
+    Execute the `setup.sh` script to create a virtual environment, install the required Python packages, and download the necessary browser binaries for Playwright.
+    - Need `bash` for running the setup script (standard on macOS and Linux)
 
 ## Setup and Installation
 
@@ -56,7 +73,7 @@ The project includes a setup script that automates the installation process.
 You can customize the scraper's behavior by modifying the `web_scraper/config.py` file:
 
 - **`BASE_URL`**: Change this URL to scrape a different product page on Newegg.
-- **`HEADLESS_MODE`**: Set to `True` to run the browser in the background without a visible UI, or `False` to monitor the process visually.
+- **`HEADLESS_MODE`**: Set to `True` to run the browser in the background without a visible UI, or `False` to monitor the process visually. By default, I've set it to False for the reviewer to assess the working of the scraper.
 
 ## Accessing the Scraped Data
 
@@ -92,7 +109,6 @@ The data is stored in a DuckDB database file located at `data/newegg_product.duc
       .exit
       ```
 ## Project Structure
-
 
 ├── duck_db/
 │   ├── database.py       # Handles all database connections and operations.

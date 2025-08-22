@@ -31,22 +31,6 @@ The project includes a setup script that automates the installation process.
     Execute the `setup.sh` script to create a virtual environment, install the required Python packages, and download the necessary browser binaries for Playwright.
     - Need `bash` for running the setup script (standard on macOS and Linux)
 
-## Setup and Installation
-
-The project includes a setup script that automates the installation process.
-
-1.  **Clone the Repository**
-    ```bash
-    git clone <your-repository-url>
-    cd <your-repository-directory>
-    ```
-
-2.  **Run the Setup Script**
-    Execute the `setup.sh` script to create a virtual environment, install the required Python packages, and download the necessary browser binaries for Playwright.
-
-    ```bash
-    bash setup.sh
-    ```
     This script will:
     - Check for the `uv` package manager and install it if missing.
     - Create a virtual environment named `.venv`.

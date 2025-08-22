@@ -7,7 +7,7 @@ RETRY_DELAY_SECONDS = 5
 SELECTORS = {
     "product": {
         "title": 'h1.product-title',
-        "brand": 'div.seller-store-link strong',
+        "brand": '//th[contains(text(), "Brand")]/following-sibling::td',
         "price_container": 'div.form-option-item.is-selected',
         "reviews_link": 'div.tab-nav[data-nav="Reviews"]',
         "rating_element": 'div.product-rating > i.rating',

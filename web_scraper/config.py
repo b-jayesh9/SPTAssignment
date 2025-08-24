@@ -2,7 +2,7 @@ BASE_URLS = [
     "https://www.newegg.com/amd-ryzen-7-9000-series-ryzen-7-9800x3d-granite-ridge-zen-5-socket-am5-desktop-cpu-processor/p/N82E16819113877",
     # add more URLs here if needed
 ]
-HEADLESS_MODE = True  # set to False if you want to see the actions happening in the browser
+HEADLESS_MODE = False  # set to False if you want to see the actions happening in the browser
 RETRY_COUNT = 3
 RETRY_DELAY_SECONDS = 5
 

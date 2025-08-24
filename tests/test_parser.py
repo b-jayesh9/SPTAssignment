@@ -23,7 +23,7 @@ async def test_extract_product_info_happy_path(html_content):
         browser = await p.chromium.launch()
         page = await browser.new_page()
 
-        # Load  static HTML content into the mock page
+        # Load static HTML content into the mock page
         await page.set_content(html_content)
 
         # Run parser on the mock page

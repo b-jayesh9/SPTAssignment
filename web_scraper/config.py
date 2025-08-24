@@ -1,5 +1,8 @@
-BASE_URL = "https://www.newegg.com/amd-ryzen-7-9000-series-ryzen-7-9800x3d-granite-ridge-zen-5-socket-am5-desktop-cpu-processor/p/N82E16819113877"
-HEADLESS_MODE = False # set to true after testing
+BASE_URLS = [
+    "https://www.newegg.com/amd-ryzen-7-9000-series-ryzen-7-9800x3d-granite-ridge-zen-5-socket-am5-desktop-cpu-processor/p/N82E16819113877",
+    # add more URLs here if needed
+]
+HEADLESS_MODE = True  # set to False if you want to see the actions happening in the browser
 RETRY_COUNT = 3
 RETRY_DELAY_SECONDS = 5
 
@@ -21,11 +24,11 @@ SELECTORS = {
         "rating_icon": 'i[class^="rating rating-"]',  # fetch rating from class
         "title": 'span.comments-title-content',
         "comment_body": 'div.comments-content',
-        "date": 'div.comments-title > span.comments-text', # check title
+        "date": 'div.comments-title > span.comments-text',  # check title
         "verified_badge": 'div.comments-verified-owner',
         "next_page_button": 'a.paginations-next'
     },
-    "dialogs": { # find any dialog popup and fetch its close button
+    "dialogs": {  # find any dialog popup and fetch its close button
         "close_promo_button": '[aria-label="close"]'
     }
 }

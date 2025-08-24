@@ -1,5 +1,4 @@
 import datetime
-import time
 import re
 import logging
 from .config import SELECTORS
@@ -41,7 +40,6 @@ class DataParser:
             # Clean the text by removing parentheses and other non-digit characters
             reviews_count_digits = re.search(r'\d+', reviews_count_text)
             info['reviews_count'] = int(reviews_count_digits.group(0)) if reviews_count_digits else 0
-            # --- End of updated logic ---
 
             info['description'] = "\n".join(
                 await page.locator(SELECTORS['product']['description_list']).all_inner_texts()
@@ -49,7 +47,7 @@ class DataParser:
             info['scraped_at'] = datetime.datetime.now()
             return info
         except Exception as e:
-            log.error("Could not extract all product information. Some fields may be missing.", exc_info=True)
+            log.error(f"Could not extract all product information due to {e}. Some fields may be missing.", exc_info=True)
             # Return partial info if something went wrong
             return info
 

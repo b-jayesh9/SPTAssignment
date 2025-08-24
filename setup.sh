@@ -26,6 +26,8 @@ echo ""
 # Activate the environment so we can install packages into it.
 source "$VENV_DIR/bin/activate"
 
+# this is our requirements file where we store packages, we keep it loosely bound to debug issues with new versions when they come
+# uv.lock will help us with backward compatability
 REQUIREMENTS_FILE="requirements.txt"
 
 if [ -f "$REQUIREMENTS_FILE" ]; then

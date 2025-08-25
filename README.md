@@ -112,16 +112,29 @@ The data is stored in a DuckDB database file located at `data/newegg_product.duc
 
 ## Considerations and Design Decisions
 ### Scraping Framework
-For the scraping framework, I went with Playwright because of how well it handles modern websites that rely heavily on JavaScript. Unlike older tools, Playwright's asynchronous design makes it much faster when dealing with multiple web requests, which is exactly what you need for scraping operations.
+For the scraping framework, I went with Playwright because of how well it handles modern websites that rely heavily on JavaScript.
+Unlike older tools, Playwright's asynchronous design makes it much faster when dealing with multiple web requests,
+which is something that BeautifulSoup or Selenium do not provide.
 ### Database Selection
-I chose DuckDB as the backend database, and it turned out to be perfect for this project. Since it's file-based and doesn't require running a separate database server, setup is incredibly straightforward. You get all the analytical power of SQL without the overhead of managing a traditional database system.
+I chose DuckDB as the backend database, and it turned out to be perfect for this project.
+Since it's file-based and doesn't require running a separate database server, setup is easy.
+You get all the analytical power of SQL without the overhead of managing a traditional database system.
 ### Handling Anti-Bot Protection
-Most e-commerce sites like Newegg use Cloudflare and similar services to detect and block automated scrapers. To get around this, I integrated playwright-stealth, which applies various techniques to make the scraper's behavior more human-like. This dramatically improved the success rate when accessing protected pages.
+Most e-commerce sites like Newegg use Cloudflare and similar services to detect and block automated scrapers.
+To get around this, I integrated playwright-stealth, which applies various techniques to make the scraper's behavior more human-like.
+This dramatically improved the success rate when accessing protected pages.
 ### Code Organization
-I structured the project with clear separation between different concerns - the scraper logic, data parsing, and database operations are all in separate modules. This approach makes maintenance much easier since changes to one part don't ripple through the entire codebase.
+I structured the project with a clear separation between different concerns: the scraper logic, data parsing, and database operations are all in separate modules.
+This approach makes maintenance much easier since changes to one part don't ripple through the entire codebase.
 If Newegg changes their page layout tomorrow, I only need to update the CSS selectors in the parser module.
 
 ### Configuration Management
 Rather than scattering settings and selectors throughout the code, everything configurable lives in a single config file. This makes it much easier to tweak the scraper's behavior or adapt it to different sites without hunting through multiple files.
 ### Setup Automation
 The setup script handles all the tedious initial configuration - setting up the virtual environment, installing dependencies, and downloading browser binaries. This removes a lot of friction for anyone who wants to run or modify the scraper.
+
+
+
+# BONUS ASSIGNMENT
+
+Link to the bonus assignment : https://github.com/b-jayesh9/SPTBonusAssignment

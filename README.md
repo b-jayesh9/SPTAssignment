@@ -94,47 +94,57 @@ The data is stored in a DuckDB database file located at `data/newegg_product.duc
       ```
 ## Project Structure
 
+```
 ├── duck_db/
-│   ├── database.py       # Handles all database connections and operations.
-│   └── __init__.py
+│   ├── __init__.py
+│   └── database.py       # Handles all database connections and operations.
 ├── logs/
 │   └── scraper.log       # Log file generated during runtime.
 ├── web_scraper/
+│   ├── __init__.py
 │   ├── config.py         # Stores configuration settings and CSS selectors.
 │   ├── data_parser.py    # Responsible for parsing HTML content.
-│   ├── scraper.py        # Core web scraping logic using Playwright.
-│   └── __init__.py
+│   └── scraper.py        # Core web scraping logic using Playwright.
+├── .venv/                # Virtual environment directory (created by setup.sh).
 ├── main.py               # Main entry point to run the scraper.
 ├── requirements.txt      # Lists all Python dependencies.
 ├── setup.sh              # Automates the setup and installation process.
 └── README.md             # This file.
+```
 
+## Key Design Decisions
 
-## Considerations and Design Decisions
-### Scraping Framework
-For the scraping framework, I went with Playwright because of how well it handles modern websites that rely heavily on JavaScript.
-Unlike older tools, Playwright's asynchronous design makes it much faster when dealing with multiple web requests,
-which is something that BeautifulSoup or Selenium do not provide.
-### Database Selection
-I chose DuckDB as the backend database, and it turned out to be perfect for this project.
-Since it's file-based and doesn't require running a separate database server, setup is easy.
-You get all the analytical power of SQL without the overhead of managing a traditional database system.
-### Handling Anti-Bot Protection
-Most e-commerce sites like Newegg use Cloudflare and similar services to detect and block automated scrapers.
-To get around this, I integrated playwright-stealth, which applies various techniques to make the scraper's behavior more human-like.
-This dramatically improved the success rate when accessing protected pages.
-### Code Organization
-I structured the project with a clear separation between different concerns: the scraper logic, data parsing, and database operations are all in separate modules.
-This approach makes maintenance much easier since changes to one part don't ripple through the entire codebase.
-If Newegg changes their page layout tomorrow, I only need to update the CSS selectors in the parser module.
+The architecture of this scraper was designed for performance, resilience, and maintainability.
 
-### Configuration Management
-Rather than scattering settings and selectors throughout the code, everything configurable lives in a single config file. This makes it much easier to tweak the scraper's behavior or adapt it to different sites without hunting through multiple files.
-### Setup Automation
-The setup script handles all the tedious initial configuration - setting up the virtual environment, installing dependencies, and downloading browser binaries. This removes a lot of friction for anyone who wants to run or modify the scraper.
+### 1. Asynchronous Scraping Framework (Playwright & asyncio)
 
+-   **Decision:** Playwright was chosen over libraries like Selenium or BeautifulSoup, and the entire application was built on Python's `asyncio` framework.
+-   **Rationale & Scalability:**
+    -   **Modern Web Compatibility:** Playwright excels at handling modern, JavaScript-heavy single-page applications where content is loaded dynamically.
+    -   **High Concurrency:** By leveraging `asyncio`, the scraper can manage multiple browser instances and network requests concurrently. The `main.py` script uses `asyncio.gather` to launch scraping tasks for all URLs in parallel, making the system highly scalable for scraping hundreds or thousands of pages efficiently. This is a significant performance advantage over traditional synchronous scraping methods.
 
+### 2. In-Process Analytical Database (DuckDB)
 
-# BONUS ASSIGNMENT
+-   **Decision:** DuckDB was selected as the data storage backend instead of a traditional client-server database (like PostgreSQL) or a simple file format (like CSV).
+-   **Rationale & Scalability:**
+    -   **Zero-Overhead Setup:** As a file-based, in-process database, DuckDB requires no separate server or complex configuration, making the project highly portable and easy to set up.
+    -   **Analytical Power:** It provides the full power of an analytical SQL database, allowing for complex queries and aggregations directly on the stored data.
+    -   **Data Integrity:** The `database.py` module implements an `upsert` strategy with `UNIQUE` constraints. This ensures that re-running the scraper updates existing records (e.g., price changes) and adds new ones without creating duplicates, which is critical for maintaining a clean dataset over time.
 
-Link to the bonus assignment : https://github.com/b-jayesh9/SPTBonusAssignment
+### 3. Anti-Bot Evasion Strategy (playwright-stealth)
+
+-   **Decision:** `playwright-stealth` was integrated to actively combat anti-bot measures.
+-   **Rationale & Scalability:**
+    -   **Human-like Behavior:** Modern e-commerce sites use sophisticated fingerprinting to detect automated browsers. `playwright-stealth` automatically applies a series of patches to the browser automation scripts to evade these detection mechanisms (e.g., by hiding `webdriver` flags).
+    -   **Increased Reliability:** This significantly increases the success rate of scraping operations and reduces the likelihood of being IP-blocked, making the scraper more reliable for long-running, large-scale jobs. This is further enhanced by the rotation of user agents defined in `config.py`.
+
+### 4. Modular and Centralized Configuration
+
+-   **Decision:** The project is structured into distinct modules (scraper, parser, database), and all configuration settings, including URLs and CSS selectors, are centralized in `web_scraper/config.py`.
+-   **Rationale & Scalability:**
+    -   **Maintainability:** This separation of concerns is crucial for long-term maintenance. If the target website updates its layout, changes only need to be made to the CSS selectors in the `config.py` file, without altering the core scraping or database logic.
+    -   **Adaptability:** This design makes it easy to adapt the scraper for a different website. A new configuration file and potentially a new parser function could be added without refactoring the entire application.
+
+# Bonus Assignment
+The bonus assignment can be found at the following repository:
+[https://github.com/b-jayesh9/SPTBonusAssignment](https://github.com/b-jayesh9/SPTBonusAssignment)
